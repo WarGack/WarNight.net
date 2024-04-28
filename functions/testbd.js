@@ -16,6 +16,11 @@ export async function onRequest(event) {
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
 
+      // Проверяем наличие поля "id" и "string" в каждой записи
+      if (!row.hasOwnProperty('id') || !row.hasOwnProperty('string')) {
+        throw new Error('Invalid data format: missing "id" or "string"');
+      }
+
       // Добавляем "id, string" в строку
       resultString += `${row.id}, ${row.string}`;
 
@@ -31,8 +36,11 @@ export async function onRequest(event) {
     });
   } catch (error) {
     console.error('Error fetching or processing data:', error);
-    return new Response('Error fetching or processing data', {
+
+    // Возвращаем дополнительные детали ошибки в виде текста
+    return new Response(`Error: ${error.message}`, {
       status: 500,
+      headers: { 'Content-Type': 'text/plain' },
     });
   }
 }

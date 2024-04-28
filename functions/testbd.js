@@ -3,10 +3,20 @@ export async function onRequest(event) {
   
   try {
     const data = await ps.all();
-    const jsonData = JSON.stringify(data);
     
-    return new Response(jsonData, {
-      headers: { 'Content-Type': 'application/json' },
+    // Формируем HTML-код для таблицы
+    let tableHtml = '<table><thead><tr><th>ID</th><th>Name</th><th>Age</th></tr></thead><tbody>';
+    
+    // Проходим по данным и добавляем строки таблицы
+    data.forEach(row => {
+      tableHtml += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.age}</td></tr>`;
+    });
+    
+    tableHtml += '</tbody></table>';
+    
+    // Возвращаем HTML-страницу с таблицей
+    return new Response(tableHtml, {
+      headers: { 'Content-Type': 'text/html' },
     });
   } catch (error) {
     return new Response('Error fetching data from database', {

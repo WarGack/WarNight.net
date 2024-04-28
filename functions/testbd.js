@@ -7,4 +7,4 @@ export async function onRequest(event) {
     
     return new Response(jsonData, {
       headers: { 'Content-Type': 'application/json' },
-    });
+    })

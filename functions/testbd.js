@@ -5,11 +5,11 @@ export async function onRequest(event) {
     const data = await ps.all();
     
     // Формируем HTML-код для таблицы
-    let tableHtml = '<table><thead><tr><th>ID</th><th>Name</th><th>Age</th></tr></thead><tbody>';
+    let tableHtml = '<table><thead><tr><th>ID</th><th>STring</th></tr></thead><tbody>';
     
     // Проходим по данным и добавляем строки таблицы
     data.forEach(row => {
-      tableHtml += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.age}</td></tr>`;
+      tableHtml += `<tr><td>${row.id}</td><td>${row.string}</td></tr>`;
     });
     
     tableHtml += '</tbody></table>';

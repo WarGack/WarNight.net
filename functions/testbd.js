@@ -3,7 +3,6 @@ export async function onRequest(event) {
   
 
     const data = await ps.all();
-    const jsonData = JSON.stringify(data);
     
-return new Response(jsonData);
+return new Response(data);
     }

@@ -1,10 +1,9 @@
 export async function onRequest(event) {
     try {
         // Открываем подключение к базе данных
-        const db = event.env.BEBROID;
 
         // Выполняем SQL-запрос для вставки данных
-        const result = await db.run('INSERT INTO qoca (string) VALUES ("bebrochka_pisechka")');
+        const result = await event.env.BEBROID.db.run('INSERT INTO qoca (string) VALUES (bebrochka_pisechka)');
 
         // Проверяем результат выполнения запроса
         if (result.changes > 0) {

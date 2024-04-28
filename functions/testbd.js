@@ -1,5 +1,4 @@
-export default {
-  async fetch(request, env, ctx) {
+export function onRequest(context) {
     // Create a prepared statement with the query
     const ps = env.BEBROID.prepare('SELECT * from qoca');
     
@@ -20,5 +19,4 @@ export default {
         status: 500,
       });
     }
-  },
-};
+  };

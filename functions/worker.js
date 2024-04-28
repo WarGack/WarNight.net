@@ -1,22 +1,17 @@
 export async function onRequest(event) {
-    if (event.request.method !== 'POST') {
-        return new Response('Method Not Allowed', { status: 405 });
-    }
-
     try {
-        const requestBody = await event.request.text();
-        const formData = new URLSearchParams(requestBody);
+        // Открываем подключение к базе данных
+        const db = event.env.BEBROID;
 
-        const string = formData.get('string'); // Получаем значение 'string' из формы
+        // Выполняем SQL-запрос для вставки данных
+        const result = await db.run('INSERT INTO qoca (string) VALUES (?)', ['bebrochka_pisechka']);
 
-        if (!string) {
-            throw new Error('String value is required');
+        // Проверяем результат выполнения запроса
+        if (result.changes > 0) {
+            return new Response('Data added successfully!', { status: 200 });
+        } else {
+            return new Response('No data added to database.', { status: 500 });
         }
-
-        const ps = event.env.BEBROID.prepare('INSERT INTO qoca (string) VALUES (?)');
-        const result = await ps.run(string);
-
-        return new Response('Data added successfully!', { status: 200 });
     } catch (error) {
         console.error('Error adding data to database:', error);
         return new Response('Failed to add data to database.', { status: 500 });

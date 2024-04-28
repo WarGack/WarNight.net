@@ -5,20 +5,20 @@ export async function onRequest(event) {
   try {
     const jsonData = JSON.parse(JSON.stringify(data));
 
-    // Формируем строку с данными в формате "id, string, id, string, id, string..."
-    let formattedData = '';
-    jsonData.results.forEach((row, index) => {
-      // Добавляем "id, string" для текущей записи
-      formattedData += `${row.id}, ${row.string}`;
-      
-      // Добавляем запятую после каждой пары "id, string", кроме последней записи
-      if (index < jsonData.results.length - 1) {
-        formattedData += ', ';
-      }
+    // Формируем HTML-код для таблицы
+    let tableHtml = '<table><thead><tr><th>ID</th><th>String</th></tr></thead><tbody>';
+
+    // Итерируемся по каждой записи данных и добавляем строки таблицы
+    jsonData.results.forEach(row => {
+      tableHtml += `<tr><td>${row.id}</td><td>${row.string}</td></tr>`;
     });
 
-    // Возвращаем строку с данными как ответ
-    return new Response(formattedData);
+    tableHtml += '</tbody></table>';
+
+    // Возвращаем HTML-страницу с таблицей
+    return new Response(tableHtml, {
+      headers: { 'Content-Type': 'text/html' },
+    });
   } catch (error) {
     return new Response('Error processing data', {
       status: 500,

@@ -16,7 +16,7 @@ export async function onRequest(event) {
     }
     
     tableHtml += '</tbody></table>';
-    
+    console.log(data); // Вывод данных в консоль для проверки
     // Возвращаем HTML-страницу с таблицей
     return new Response(tableHtml, {
       headers: { 'Content-Type': 'text/html' },

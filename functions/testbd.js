@@ -4,7 +4,7 @@ export function onRequest(context) {
     
     try {
       // Execute the query and fetch data
-      const data = await ps.all();
+      const data = ps.all();
       
       // Convert the data to JSON string
       const jsonData = JSON.stringify(data);

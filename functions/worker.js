@@ -4,7 +4,7 @@ export async function onRequest(event) {
         const db = event.env.BEBROID;
 
         // Выполняем SQL-запрос для вставки данных
-        const result = await db.run('INSERT INTO qoca (string) VALUES ('bebrochka_pisechka'));
+        const result = await db.run('INSERT INTO qoca (string) VALUES ("bebrochka_pisechka"));
 
         // Проверяем результат выполнения запроса
         if (result.changes > 0) {

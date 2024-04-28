@@ -1,3 +1,7 @@
 export function onRequest(context) {
-  return new Response("<b>Hello, world!</b>")
+  const message = "<strong>Hello, world!</strong>";
+
+  return new Response(message, {
+    headers: { 'Content-Type': 'text/html' },
+  });
 }

@@ -1,63 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Table</title>
-    <style>
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Database Table</h1>
-    <table id="databaseTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>String</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- Table rows will be dynamically populated here -->
-        </tbody>
-    </table>
-
-    <script>
-        // Fetch data from your CloudFlare Pages endpoint
-        fetch('https://warnight-net.pages.dev/testbd')
-            .then(response => response.json())
-            .then(data => {
-                // Access the 'results' array from the response
-                const results = data.results;
-
-                // Get the table body element to append rows
-                const tableBody = document.getElementById('tableBody');
-
-                // Loop through each result and create a row in the table
-                results.forEach(result => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${result.id}</td>
-                        <td>${result.string}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    </script>
-</body>
-</html>
+export async function onRequest(event) {
+  const ps = event.env.BEBROID.prepare('SELECT id, string FROM qoca');
+  
+  try {
+    const data = await ps.all();
+    
+    // Формируем HTML-код для таблицы
+    let tableHtml = '<table><thead><tr><th>ID</th><th>String Value</th></tr></thead><tbody>';
+    
+    // Проходим по данным и добавляем строки таблицы
+    data.forEach(row => {
+      tableHtml += `<tr><td>${row.id}</td><td>${row.string}</td></tr>`;
+    });
+    
+    tableHtml += '</tbody></table>';
+    
+    // Возвращаем HTML-страницу с таблицей
+    return new Response(tableHtml, {
+      headers: { 'Content-Type': 'text/html' },
+    });
+  } catch (error) {
+    return new Response('Error fetching data from database', {
+      status: 500,
+    });
+  }
+}

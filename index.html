@@ -28,8 +28,8 @@
             const formData = new FormData(this); // Получаем данные из формы
 
             try {
-                // Отправляем данные на сервер (CloudFlare Worker)
-                const response = await fetch('https://your-worker-url.yourdomain.workers.dev/addData', {
+                // Отправляем данные на сервер (CloudFlare Pages Function)
+                const response = await fetch('/.netlify/functions/addData', {
                     method: 'POST',
                     body: formData
                 });

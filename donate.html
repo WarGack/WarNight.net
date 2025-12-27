@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donate — Boomiings</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 24px; background:#0b0f17; color:#e8eefc; }
+    .card { max-width: 520px; margin: 0 auto; background:#111827; border:1px solid #23304a; border-radius:16px; padding:20px; }
+    h1 { margin: 0 0 12px; font-size: 22px; }
+    p { margin: 0 0 16px; color:#b7c3dd; line-height: 1.35; }
+    label { display:block; margin: 12px 0 6px; color:#cfe0ff; font-size: 14px; }
+    input, select, button {
+      width: 100%; box-sizing:border-box;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid #2a3a5a;
+      background:#0b1220;
+      color:#e8eefc;
+      outline: none;
+    }
+    input:focus, select:focus { border-color:#4f7cff; }
+    .row { display:flex; gap: 10px; }
+    .row > * { flex: 1; }
+    button {
+      margin-top: 14px;
+      background: #2b64ff;
+      border: 0;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor:not-allowed; }
+    .hint { margin-top: 10px; font-size: 12px; color:#9fb1d6; }
+    .err { margin-top: 12px; padding: 10px; border-radius: 12px; background:#2a1212; border:1px solid #5a2a2a; color:#ffd2d2; display:none; }
+    .ok { margin-top: 12px; padding: 10px; border-radius: 12px; background:#0f2a16; border:1px solid #2a5a3a; color:#c9ffd8; display:none; }
+    .small { font-size: 12px; color:#9fb1d6; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Поддержать донатом</h1>
+    <p>Введите любую сумму — откроется страница оплаты NOWPayments (крипто).</p>
+
+    <label for="amount">Сумма</label>
+    <input id="amount" inputmode="decimal" placeholder="Например: 5" value="5" />
+
+    <div class="row">
+      <div>
+        <label for="priceCurrency">Валюта суммы</label>
+        <select id="priceCurrency">
+          <option value="USD" selected>USD</option>
+          <option value="EUR">EUR</option>
+          <option value="RUB">RUB</option>
+        </select>
+        <div class="small">Это “price_currency” (в чём задана сумма).</div>
+      </div>
+      <div>
+        <label for="payCurrency">Оплата в</label>
+        <select id="payCurrency">
+          <option value="">Любая (выбор на странице)</option>
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="USDTTRC20">USDT (TRC20)</option>
+          <option value="USDTERC20">USDT (ERC20)</option>
+          <option value="TON">TON</option>
+        </select>
+        <div class="small">Если пусто — юзер выберет на checkout.</div>
+      </div>
+    </div>
+
+    <label for="memo">Комментарий (необязательно)</label>
+    <input id="memo" maxlength="140" placeholder="Например: за стрим ❤️" />
+
+    <button id="btn">Перейти к оплате</button>
+
+    <div class="hint">Если не редиректит — проверь, что Worker доступен и CORS включён.</div>
+    <div class="err" id="err"></div>
+    <div class="ok" id="ok"></div>
+  </div>
+
+  <script>
+    const API_BASE = "https://api.boomiings.com"; // твой Worker домен
+    const btn = document.getElementById("btn");
+    const errBox = document.getElementById("err");
+    const okBox = document.getElementById("ok");
+
+    function showErr(msg) {
+      okBox.style.display = "none";
+      errBox.textContent = msg;
+      errBox.style.display = "block";
+    }
+    function showOk(msg) {
+      errBox.style.display = "none";
+      okBox.textContent = msg;
+      okBox.style.display = "block";
+    }
+
+    btn.addEventListener("click", async () => {
+      errBox.style.display = "none";
+      okBox.style.display = "none";
+      btn.disabled = true;
+
+      const amountRaw = document.getElementById("amount").value.trim().replace(",", ".");
+      const amount = Number(amountRaw);
+      const priceCurrency = document.getElementById("priceCurrency").value;
+      const payCurrency = document.getElementById("payCurrency").value || null;
+      const memo = document.getElementById("memo").value.trim();
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        btn.disabled = false;
+        showErr("Введи корректную сумму больше 0.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/v1/donate/create`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            amount,
+            price_currency: priceCurrency,
+            pay_currency: payCurrency,
+            memo
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          btn.disabled = false;
+          showErr(data?.error || `Ошибка API (${res.status})`);
+          return;
+        }
+
+        if (!data.invoice_url) {
+          btn.disabled = false;
+          showErr("Не пришёл invoice_url от сервера.");
+          return;
+        }
+
+        showOk("Открываю страницу оплаты…");
+        location.href = data.invoice_url;
+      } catch (e) {
+        btn.disabled = false;
+        showErr("Сетевая ошибка: " + (e?.message || e));
+      }
+    });
+  </script>
+</body>
+</html>

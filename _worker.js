@@ -1,51 +1,56 @@
 export default {
-  async fetch(req){
-    const u=new URL(req.url)
+  async fetch(req, env) {
+    const u = new URL(req.url)
 
-    if(u.pathname==="/api/create-invoice"){
-      const {nick}=await req.json()
+    // API-роуты
+    if (u.pathname === "/api/create-invoice") {
+      const { nick } = await req.json()
 
-      const r=await fetch("https://api.nowpayments.io/v1/invoice",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-api-key":"REBP4MH-7674DWE-PCDS26J-WEDFK0F"
+      const r = await fetch("https://api.nowpayments.io/v1/invoice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "REBP4MH-7674DWE-PCDS26J-WEDFK0F"
         },
-        body:JSON.stringify({
-          price_amount:4.99,
-          price_currency:"usd",
-          order_description:nick||""
+        body: JSON.stringify({
+          price_amount: 4.99,
+          price_currency: "usd",
+          order_description: nick || ""
         })
       })
 
-      return new Response(JSON.stringify({invoice_url:(await r.json()).invoice_url}),{
-        headers:{"Content-Type":"application/json"}
+      return new Response(JSON.stringify({ invoice_url: (await r.json()).invoice_url }), {
+        headers: { "Content-Type": "application/json" }
       })
     }
 
-    if(u.pathname==="/api/fk"){
-      const {nick}=await req.json()
+    if (u.pathname === "/api/fk") {
+      const { nick } = await req.json()
 
-      const m="32189"
-      const oa="4.99"
-      const currency="USD"
-      const o="donate-"+Date.now()
-      const secret1="$)c$kX/wTHE,Ex("
+      const m = "32189"
+      const oa = "4.99"
+      const currency = "USD"
+      const o = "donate-" + Date.now()
+      const secret1 = "$)c$kX/wTHE,Ex("
+      const s = md5(`${m}:${oa}:${secret1}:${currency}:${o}`)
 
-      const s=md5(`${m}:${oa}:${secret1}:${currency}:${o}`)
-      const url=`https://pay.fk.money/?m=${enc(m)}&oa=${enc(oa)}&currency=${enc(currency)}&o=${enc(o)}&us_nick=${enc(nick||"")}&s=${s}`
+      const url =
+        `https://pay.fk.money/?m=${enc(m)}&oa=${enc(oa)}&currency=${enc(currency)}` +
+        `&o=${enc(o)}&us_nick=${enc(nick || "")}&s=${s}`
 
-      return new Response(JSON.stringify({url}),{
-        headers:{"Content-Type":"application/json"}
+      return new Response(JSON.stringify({ url }), {
+        headers: { "Content-Type": "application/json" }
       })
     }
 
-    return new Response("404")
+    // ВСЁ ОСТАЛЬНОЕ — отдать как статику (donate.html и т.д.)
+    return env.ASSETS.fetch(req)
   }
 }
 
-const enc=encodeURIComponent
+const enc = encodeURIComponent
 
+// MD5 (как и раньше)
 function md5(s){return rhex(binl_md5(str2binl(s),s.length*8))}
 function rhex(n){let s="",j;for(j=0;j<4;j++)s+=hex_chr[(n>>>(j*8+4))&15]+hex_chr[(n>>>(j*8))&15];return s}
 function str2binl(s){let b=[],i;for(i=0;i<s.length*8;i+=8)b[i>>5]|=(s.charCodeAt(i/8)&255)<<(i%32);return b}

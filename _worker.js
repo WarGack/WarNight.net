@@ -2,9 +2,8 @@ export default {
   async fetch(req, env) {
     const u = new URL(req.url)
 
-    // API
     if (u.pathname === "/api/create-invoice") {
-      const { nick } = await req.json()
+      const { email } = await req.json()
 
       const r = await fetch("https://api.nowpayments.io/v1/invoice", {
         method: "POST",
@@ -15,7 +14,7 @@ export default {
         body: JSON.stringify({
           price_amount: 4.99,
           price_currency: "usd",
-          order_description: nick || ""
+          order_description: email || ""
         })
       })
 
@@ -25,7 +24,6 @@ export default {
       )
     }
 
-    // Статика (donate.html и всё остальное)
     return env.ASSETS.fetch(req)
   }
 }

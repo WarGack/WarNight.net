@@ -3,7 +3,9 @@ export default {
     const u = new URL(req.url)
 
     if (u.pathname === "/api/create-invoice") {
-      const { email } = await req.json()
+      const { id, email } = await req.json()
+
+      const price = id == 1 ? 2.99 : id == 2 ? 4.99 : 9.99
 
       const r = await fetch("https://api.nowpayments.io/v1/invoice", {
         method: "POST",
@@ -12,9 +14,9 @@ export default {
           "x-api-key": "REBP4MH-7674DWE-PCDS26J-WEDFK0F"
         },
         body: JSON.stringify({
-          price_amount: 4.99,
+          price_amount: price,
           price_currency: "usd",
-          order_description: email || ""
+          order_description: `${id}, ${email}`
         })
       })
 

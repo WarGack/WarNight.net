@@ -1,42 +1,9 @@
 <!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Donate</title>
-  </head>
-  <body>
-    <button id="payBtn">Оплатить $4.99</button>
-
-    <script>
-      const btn = document.getElementById("payBtn");
-
-      btn.addEventListener("click", async () => {
-        btn.disabled = true;
-
-        try {
-          const r = await fetch("https://api.boomiings.com/create-invoice", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-          });
-
-          const data = await r.json().catch(() => ({}));
-
-          if (!r.ok) {
-            throw new Error(data?.error || `HTTP ${r.status}`);
-          }
-
-          if (!data.invoice_url) {
-            throw new Error("Нет invoice_url в ответе");
-          }
-
-          // редирект на хостед-страницу оплаты NOWPayments
-          location.href = data.invoice_url;
-        } catch (e) {
-          alert("Ошибка: " + (e?.message || e));
-          btn.disabled = false;
-        }
-      });
-    </script>
-  </body>
-</html>
+<button onclick="pay()">Pay $4.99</button>
+<script>
+async function pay() {
+  const r = await fetch("https://api.boomiings.com/create-invoice", { method: "POST" });
+  const j = await r.json();
+  location = j.invoice_url;
+}
+</script>

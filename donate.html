@@ -1,24 +1,21 @@
-<input id="email" placeholder="email">
-
-<button onclick="pay(1)">$1</button>
-<button onclick="pay(2)">$2</button>
-<button onclick="pay(3)">$3</button>
-<button onclick="pay(5)">$5</button>
-<button onclick="pay(8)">$8</button>
+<input id=nick placeholder="minecraft nick">
+<button onclick=np()>Pay $4.99 (NOWPayments)</button>
+<button onclick=fk()>Pay $4.99 (FreeKassa)</button>
 
 <script>
-async function pay(amount){
-  location = (
-    await (
-      await fetch("https://rab.boomiings.com/create-invoice",{
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({
-          amount: amount,
-          email: email.value
-        })
-      })
-    ).json()
-  ).invoice_url
+async function np(){
+  location=(await (await fetch("/api/now",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({nick:nick.value})
+  })).json()).url
+}
+
+async function fk(){
+  location=(await (await fetch("/api/fk",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({nick:nick.value})
+  })).json()).url
 }
 </script>

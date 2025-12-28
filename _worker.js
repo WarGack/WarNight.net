@@ -5,7 +5,16 @@ export default {
     if (u.pathname === "/api/create-invoice") {
       const { id, email } = await req.json()
 
-      const price = id == 1 ? 2.99 : id == 2 ? 4.99 : 9.99
+      const pid = id | 0
+      if (pid < 1 || pid > 5)
+        return new Response("bad id", { status: 400 })
+
+      const price =
+        pid === 1 ? 2.99 :
+        pid === 2 ? 4.99 :
+        pid === 3 ? 9.99 :
+        pid === 4 ? 29.99 :
+                    49.99
 
       const r = await fetch("https://api.nowpayments.io/v1/invoice", {
         method: "POST",
@@ -16,7 +25,7 @@ export default {
         body: JSON.stringify({
           price_amount: price,
           price_currency: "usd",
-          order_description: `${id}, ${email}`
+          order_description: `${pid} ${email || ""}`
         })
       })
 

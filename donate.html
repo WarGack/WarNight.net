@@ -1,23 +1,14 @@
 <input id="email" placeholder="email">
 <button onclick="pay()">Pay $4.99</button>
-
 <script>
 async function pay(){
-  location = (
-    await (
-      await fetch(
-        "https://api.boomiings.com/create-invoice",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email.value
-            /* Передаём email в Worker.
-               Без этого Worker не узнает, что отправлять в NOWPayments */
-          })
-        }
-      )
-    ).json()
-  ).invoice_url
+  const j = await (await fetch("https://api.boomiings.com/create-invoice",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email.value})
+  })).json()
+
+  if(!j.invoice_url) return alert(JSON.stringify(j))
+  location = j.invoice_url
 }
 </script>

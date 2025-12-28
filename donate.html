@@ -7,8 +7,7 @@ async function pay(){
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({email:email.value})
   })).json()
-
   if(!j.invoice_url) return alert(JSON.stringify(j))
-  location = j.invoice_url
+  location=j.invoice_url
 }
 </script>

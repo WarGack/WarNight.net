@@ -1,11 +1,24 @@
 <input id="email" placeholder="email">
-<button onclick="pay()">Pay $4.99</button>
+
+<button onclick="pay(1)">$1</button>
+<button onclick="pay(2)">$2</button>
+<button onclick="pay(3)">$3</button>
+<button onclick="pay(5)">$5</button>
+<button onclick="pay(8)">$8</button>
+
 <script>
-async function pay(){
-  location=(await (await fetch("https://api.boomiings.com/create-invoice",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email:email.value})
-  })).json()).invoice_url
+async function pay(amount){
+  location = (
+    await (
+      await fetch("https://api.boomiings.com/create-invoice",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          amount: amount,
+          email: email.value
+        })
+      })
+    ).json()
+  ).invoice_url
 }
 </script>

@@ -1,6 +1,1 @@
-<button onclick="pay()">Pay $4.99</button>
-<script>
-async function pay(){
-  location = (await (await fetch("https://api.boomiings.com/create-invoice",{method:"POST"})).json()).invoice_url
-}
-</script>
+<script>location = (await (await fetch("https://api.boomiings.com/create-invoice",{method:"POST"})).json()).invoice_url</script>

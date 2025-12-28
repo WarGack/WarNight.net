@@ -1,22 +1,16 @@
 <input id="nick" placeholder="minecraft nick">
-<button onclick="np()">Pay $4.99 (NOWPayments)</button>
-<button onclick="fk()">Pay $4.99 (FreeKassa)</button>
+<button onclick="pay()">Pay $4.99</button>
 
 <script>
-async function np(){
-  location=(await (await fetch("/api/create-invoice",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({nick:nick.value})
-  })).json()).invoice_url
-}
-
-async function fk(){
-  location=(await (await fetch("/api/fk",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({nick:nick.value})
-  })).json()).url
+async function pay(){
+  location = (
+    await (
+      await fetch("/api/create-invoice",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({nick:nick.value})
+      })
+    ).json()
+  ).invoice_url
 }
 </script>
-

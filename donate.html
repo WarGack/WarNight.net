@@ -10,7 +10,7 @@
 async function pay(amount){
   location = (
     await (
-      await fetch("https://api.boomiings.com/create-invoice",{
+      await fetch("https://rab.boomiings.com/create-invoice",{
         method:"POST",
         headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({

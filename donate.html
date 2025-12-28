@@ -1,14 +1,21 @@
-<input id="nick" placeholder="minecraft nick">
+<input id="email" placeholder="email">
 <button onclick="pay()">Pay $4.99</button>
 
 <script>
 async function pay(){
+  const e = email.value.trim()
+
+  // минимальная проверка:
+  // есть @, есть точка после @, нет пробелов
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))
+    return alert("Invalid email")
+
   location = (
     await (
       await fetch("/api/create-invoice",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({nick:nick.value})
+        body:JSON.stringify({email:e})
       })
     ).json()
   ).invoice_url

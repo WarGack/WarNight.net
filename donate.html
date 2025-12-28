@@ -1,21 +1,17 @@
 <input id="email" placeholder="email">
-<button onclick="pay()">Pay $4.99</button>
+
+<button onclick="buy(1)">VIP $2.99</button>
+<button onclick="buy(2)">Lord $4.99</button>
+<button onclick="buy(3)">Lord+ $9.99</button>
 
 <script>
-async function pay(){
-  const e = email.value.trim()
-
-  // минимальная проверка:
-  // есть @, есть точка после @, нет пробелов
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))
-    return alert("Invalid email")
-
+async function buy(id){
   location = (
     await (
       await fetch("/api/create-invoice",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({email:e})
+        body:JSON.stringify({id,email:email.value})
       })
     ).json()
   ).invoice_url

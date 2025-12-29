@@ -1,26 +1,55 @@
 <input id="email" placeholder="email">
-<input id="qty" placeholder="qty" value="1">
-
-<button onclick="buy(1)">VIP $2.99</button>
-<button onclick="buy(2)">Lord $4.99</button>
-<button onclick="buy(3)">Lord+ $9.99</button>
-<button onclick="buy(4)">Владелец $29.99</button>
-<button onclick="buy(5)">WarNight $49.99</button>
+<div id="items"></div>
+<div id="cart"></div>
+<button onclick="pay()">Pay</button>
 
 <script>
-function validEmail(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) }
+const goods=[
+  [1,"VIP",2.99],
+  [2,"Lord",4.99],
+  [3,"Lord+",9.99],
+  [4,"Владелец",29.99],
+  [5,"WarNight",49.99],
+]
+const cart={} // id -> qty
 
-async function buy(id){
+function okEmail(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)}
+
+items.innerHTML = goods.map(([id,name,price]) =>
+  `<button onclick="add(${id})">Add</button> ${name} $${price}<br>`
+).join("")
+
+function add(id){ cart[id]=(cart[id]||0)+1; render() }
+function sub(id){ if(!cart[id])return; if(--cart[id]<=0)delete cart[id]; render() }
+function render(){
+  let total=0
+  cart.innerHTML = goods.map(([id,name,price])=>{
+    const q=cart[id]||0
+    if(!q) return ""
+    total += price*q
+    return `<button onclick="sub(${id})">-</button> ${name} x${q} = $${(price*q).toFixed(2)}<br>`
+  }).join("") + `Total: $${total.toFixed(2)}`
+}
+render()
+
+async function pay(){
   const e=email.value.trim()
-  if(!validEmail(e)) return alert("Invalid email")
+  if(!okEmail(e)) return alert("Invalid email")
 
-  const q=qty.value|0
-  if(q<1||q>99) return alert("Invalid qty") // минимальная проверка
+  const parts=[]
+  let total=0
+  for(const [id,name,price] of goods){
+    const q=cart[id]||0
+    if(q){ parts.push(`${id}x${q}`); total += price*q }
+  }
+  if(!parts.length) return alert("Cart is empty")
+
+  const desc = `${parts.join("+")} ${e}` // пример: "1x2+3x1 bebra@mail.ru"
 
   location=(await (await fetch("/api/create-invoice",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({id,qty:q,email:e})
+    body:JSON.stringify({amount:+total.toFixed(2), desc})
   })).json()).invoice_url
 }
 </script>

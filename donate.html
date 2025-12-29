@@ -1,6 +1,8 @@
 <input id="email" placeholder="email">
+
 <div id="items"></div>
 <div id="cart"></div>
+
 <button onclick="pay()">Pay</button>
 
 <script>
@@ -11,42 +13,67 @@ const goods=[
   [4,"Владелец",29.99],
   [5,"WarNight",49.99],
 ]
+
 const cart={} // id -> qty
 
-function okEmail(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)}
+function okEmail(e){
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)
+}
 
+// список товаров
 items.innerHTML = goods.map(([id,name,price]) =>
   `<button onclick="add(${id})">Add</button> ${name} $${price}<br>`
 ).join("")
 
-function add(id){ cart[id]=(cart[id]||0)+1; render() }
-function sub(id){ if(!cart[id])return; if(--cart[id]<=0)delete cart[id]; render() }
+function add(id){
+  cart[id]=(cart[id]||0)+1
+  render()
+}
+
+function sub(id){
+  if(!cart[id]) return
+  if(--cart[id]<=0) delete cart[id]
+  render()
+}
+
 function render(){
   let total=0
-  cart.innerHTML = goods.map(([id,name,price])=>{
+  cartDiv.innerHTML = goods.map(([id,name,price])=>{
     const q=cart[id]||0
     if(!q) return ""
-    total += price*q
+    total+=price*q
     return `<button onclick="sub(${id})">-</button> ${name} x${q} = $${(price*q).toFixed(2)}<br>`
   }).join("") + `Total: $${total.toFixed(2)}`
 }
+
+const cartDiv=document.getElementById("cart")
 render()
 
 async function pay(){
   const e=email.value.trim()
   if(!okEmail(e)) return alert("Invalid email")
 
-  const parts=[]
   let total=0
-  for(const [id,name,price] of goods){
+  const parts=[]
+
+  for(const [id,,price] of goods){
     const q=cart[id]||0
-    if(q){ parts.push(`${id}x${q}`); total += price*q }
+    if(q){
+      parts.push(`${id}x${q}`)
+      total+=price*q
+    }
   }
+
   if(!parts.length) return alert("Cart is empty")
 
-  const desc = `${parts.join("+")} ${e}` // пример: "1x2+3x1 bebra@mail.ru"
+  const desc = `${parts.join("+")} ${e}`
 
-location = await (await fetch("/api/create-invoice",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount,desc})})).text()
-
+  location = await (
+    await fetch("/api/create-invoice",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ amount: total, desc })
+    })
+  ).text()
 }
 </script>

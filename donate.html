@@ -1,4 +1,5 @@
 <input id="email" placeholder="email">
+<input id="qty" placeholder="qty" value="1">
 
 <button onclick="buy(1)">VIP $2.99</button>
 <button onclick="buy(2)">Lord $4.99</button>
@@ -7,22 +8,19 @@
 <button onclick="buy(5)">WarNight $49.99</button>
 
 <script>
-function validEmail(e){
-  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)
-}
+function validEmail(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) }
 
 async function buy(id){
-  const e = email.value.trim()
+  const e=email.value.trim()
   if(!validEmail(e)) return alert("Invalid email")
 
-  location = (
-    await (
-      await fetch("/api/create-invoice",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({id,email:e})
-      })
-    ).json()
-  ).invoice_url
+  const q=qty.value|0
+  if(q<1||q>99) return alert("Invalid qty") // минимальная проверка
+
+  location=(await (await fetch("/api/create-invoice",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({id,qty:q,email:e})
+  })).json()).invoice_url
 }
 </script>

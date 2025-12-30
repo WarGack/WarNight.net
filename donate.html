@@ -6,7 +6,7 @@
 <button onclick="pay()">Pay</button>
 
 <script>
-const goods=[
+const goods = [
   [1,"VIP",2.99],
   [2,"Lord",4.99],
   [3,"Lord+",9.99],
@@ -14,7 +14,7 @@ const goods=[
   [5,"WarNight",49.99],
 ]
 
-const cart={} // id -> qty
+const cart = {} // id -> qty
 
 function okEmail(e){
   return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)
@@ -26,53 +26,59 @@ items.innerHTML = goods.map(([id,name,price]) =>
 ).join("")
 
 function add(id){
-  cart[id]=(cart[id]||0)+1
+  cart[id] = (cart[id] || 0) + 1
   render()
 }
 
 function sub(id){
   if(!cart[id]) return
-  if(--cart[id]<=0) delete cart[id]
+  if(--cart[id] <= 0) delete cart[id]
   render()
 }
 
+const cartDiv = document.getElementById("cart")
+
 function render(){
-  let total=0
+  let total = 0
   cartDiv.innerHTML = goods.map(([id,name,price])=>{
-    const q=cart[id]||0
+    const q = cart[id] || 0
     if(!q) return ""
-    total+=price*q
+    total += price * q
     return `<button onclick="sub(${id})">-</button> ${name} x${q} = $${(price*q).toFixed(2)}<br>`
   }).join("") + `Total: $${total.toFixed(2)}`
 }
 
-const cartDiv=document.getElementById("cart")
 render()
 
 async function pay(){
-  const e=email.value.trim()
+  const e = email.value.trim()
   if(!okEmail(e)) return alert("Invalid email")
 
-  let total=0
-  const parts=[]
+  let total = 0
+  const parts = []
 
   for(const [id,,price] of goods){
-    const q=cart[id]||0
+    const q = cart[id] || 0
     if(q){
       parts.push(`${id}x${q}`)
-      total+=price*q
+      total += price * q
     }
   }
 
   if(!parts.length) return alert("Cart is empty")
 
+  const amount = +total.toFixed(2) // КЛЮЧЕВО: убираем float-мусор
   const desc = `${parts.join("+")} ${e}`
 
-location = await (await fetch("/api/create-invoice",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({ amount:+total.toFixed(2), desc })
-})).text()
+  // для отладки, если вдруг снова 403
+   console.log(amount, desc)
 
+  location = await (
+    await fetch("/api/create-invoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, desc })
+    })
+  ).text()
 }
 </script>

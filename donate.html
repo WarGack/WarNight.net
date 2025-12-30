@@ -68,12 +68,11 @@ async function pay(){
 
   const desc = `${parts.join("+")} ${e}`
 
-  location = await (
-    await fetch("/api/create-invoice",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ amount: total, desc })
-    })
-  ).text()
+location = await (await fetch("/api/create-invoice",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({ amount:+total.toFixed(2), desc })
+})).text()
+
 }
 </script>

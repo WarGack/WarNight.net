@@ -1,0 +1,25 @@
+<h2>Ключ GDH</h2>
+
+<img src="/shop/7.avif" width=300><br><br>
+
+Цена: $4.99<br><br>
+
+<input id=email placeholder="Email для получения ключа"><br><br>
+
+<button onclick=pay()>Оплатить</button>
+
+<script>
+async function pay(){
+  const e = email.value.trim()
+  if(!e) return alert("Введите email")
+
+  location = await (await fetch("/api/np",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      amount:4.99,
+      desc:"7 " + e
+    })
+  })).text()
+}
+</script>

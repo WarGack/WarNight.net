@@ -17,3 +17,24 @@ img{max-width:100%;height:auto}
 ._nav a._on{background:#111;border-color:#777}
 ._goods{display:flex;flex-wrap:wrap;gap:20px}
 ._goods a{text-decoration:none}
+
+._card{
+  width:200px;
+  text-decoration:none;
+  display:block;
+}
+
+._card img{
+  display:block;
+}
+
+._price{
+  font-weight:600;
+  margin-top:6px;
+}
+
+._name{
+  font-size:16px;
+  line-height:1.2;
+  word-wrap:break-word;
+}

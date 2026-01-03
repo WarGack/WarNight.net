@@ -1,3 +1,5 @@
+<link rel=stylesheet href=/_s.css>
+
 <h2>Ключ Mega Hack v9</h2>
 
 <img src="/shop/6.avif" width=300><br><br>
@@ -6,20 +8,26 @@
 
 <input id=email placeholder="Email для получения ключа"><br><br>
 
+Количество:
+<select id=qty>
+  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+  <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+</select>
+<br><br>
+
 <button onclick=pay()>Оплатить</button>
 
 <script>
 async function pay(){
   const e = email.value.trim()
   if(!e) return alert("Введите email")
-
+  const q = +qty.value
   location = await (await fetch("/api/np",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      amount:7.99,
-      desc:"6 " + e
-    })
+    body:JSON.stringify({amount:+(7.99*q).toFixed(2),desc:`6x${q} ${e}`})
   })).text()
 }
 </script>
+
+<script src=/_f.js></script>

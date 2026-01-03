@@ -15,3 +15,5 @@ img{max-width:100%;height:auto}
 ._nav a{padding:6px 10px;border:1px solid #333;text-decoration:none}
 ._nav a:hover{background:#111}
 ._nav a._on{background:#111;border-color:#777}
+._goods{display:flex;flex-wrap:wrap;gap:20px}
+._goods a{text-decoration:none}

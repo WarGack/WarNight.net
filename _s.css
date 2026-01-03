@@ -1,0 +1,10 @@
+body{margin:20px;font:20px/1.4 system-ui,Arial;background:#0b0b0b;color:#eaeaea}
+a{color:#9ad}
+hr{border:0;border-top:1px solid #333;margin:20px 0}
+input,select,button{font:inherit;padding:8px;margin:4px 0;background:#111;color:#eaeaea;border:1px solid #333}
+button{cursor:pointer}
+table{border-collapse:collapse}
+td,th{padding:6px 10px;border:1px solid #333}
+img{max-width:100%;height:auto}
+._footer{display:flex;justify-content:space-between;font-size:16px;gap:12px;flex-wrap:wrap}
+._footerR a{margin-left:10px}

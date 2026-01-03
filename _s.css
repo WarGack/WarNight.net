@@ -33,11 +33,11 @@ img{max-width:100%;height:auto}
   margin-top:6px;
 }
 
-._price, ._name{text-align:center}
-._card:hover{opacity:.11}
-
 ._name{
   font-size:16px;
   line-height:1.2;
   word-wrap:break-word;
 }
+
+._price, ._name{text-align:center}
+._card:hover{opacity:.11}

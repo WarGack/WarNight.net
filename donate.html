@@ -1,3 +1,5 @@
+<link rel=stylesheet href=/_s.css>
+
 <h2>Донат на сервер mc.WarNight.net</h2>
 
 <input id=nick placeholder="Minecraft никнейм"><br><br>
@@ -32,16 +34,13 @@
 async function pay(){
   const n = nick.value.trim()
   if(!n) return alert("Введите ник")
-
   const [id, price] = rank.value.split(" ")
-
-  const amount = +price
-  const desc = id + " " + n
-
   location = await (await fetch("/api/np",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount,desc})
+    body:JSON.stringify({amount:+price,desc:id+" "+n})
   })).text()
 }
 </script>
+
+<script src=/_f.js></script>

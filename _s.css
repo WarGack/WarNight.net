@@ -34,7 +34,7 @@ img{max-width:100%;height:auto}
 }
 
 ._price, ._name{text-align:center}
-._card:hover{opacity:.85}
+._card:hover{opacity:.11}
 
 ._name{
   font-size:16px;

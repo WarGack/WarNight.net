@@ -1,56 +1,42 @@
-<input id="email" placeholder="email">
+<h2>Донат на сервер mc.WarNight.net</h2>
 
-<div id="items"></div>
-<div id="cart"></div>
+<input id=nick placeholder="Minecraft никнейм"><br><br>
 
-<button onclick="pay()">Pay</button>
+<select id=rank>
+  <option value="1 2.99">VIP — $2.99</option>
+  <option value="2 4.99">Lord — $4.99</option>
+  <option value="3 9.99">Lord+ — $9.99</option>
+  <option value="4 29.99">Владелец — $29.99</option>
+  <option value="5 49.99">WarNight — $49.99</option>
+</select><br><br>
+
+<button onclick=pay()>Оплатить</button>
+
+<hr>
+
+<h3>Дополнительные товары</h3>
+
+<a href="/shop/6.html">
+  <img src="/shop/6.avif" width=200><br>
+  Ключ Mega Hack v9 — $7.99
+</a>
+
+<br><br>
+
+<a href="/shop/7.html">
+  <img src="/shop/7.avif" width=200><br>
+  Ключ GDH — $4.99
+</a>
 
 <script>
-const goods=[
-  [1,"VIP",2.99],
-  [2,"Lord",4.99],
-  [3,"Lord+",9.99],
-  [4,"Владелец",29.99],
-  [5,"WarNight",49.99],
-]
-const cart={}
-
-function okEmail(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) }
-
-items.innerHTML = goods.map(([id,name,price]) =>
-  `<button onclick="add(${id})">Add</button> ${name} $${price}<br>`
-).join("")
-
-function add(id){ cart[id]=(cart[id]||0)+1; render() }
-function sub(id){ if(!cart[id])return; if(--cart[id]<=0)delete cart[id]; render() }
-
-const cartDiv=document.getElementById("cart")
-
-function render(){
-  let total=0
-  cartDiv.innerHTML = goods.map(([id,name,price])=>{
-    const q=cart[id]||0
-    if(!q) return ""
-    total += price*q
-    return `<button onclick="sub(${id})">-</button> ${name} x${q} = $${(price*q).toFixed(2)}<br>`
-  }).join("") + `Total: $${total.toFixed(2)}`
-}
-render()
-
 async function pay(){
-  const e=email.value.trim()
-  if(!okEmail(e)) return alert("Invalid email")
+  const n = nick.value.trim()
+  if(!n) return alert("Введите ник")
 
-  let total=0
-  const parts=[]
-  for(const [id,,price] of goods){
-    const q=cart[id]||0
-    if(q){ parts.push(`${id}x${q}`); total += price*q }
-  }
-  if(!parts.length) return alert("Cart is empty")
+  const [id, price] = rank.value.split(" ")
 
-  const amount = +total.toFixed(2)
-  const desc = `${parts.join("+")} ${e}`
+  const amount = +price
+  const desc = id + " " + n
 
   location = await (await fetch("/api/np",{
     method:"POST",

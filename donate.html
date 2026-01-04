@@ -1,57 +1,34 @@
-<link rel=stylesheet href=/_s.css>
-<script src=/_h.js></script>
+<title>Магазин</title><center><body style="font-size: 33px">Донат на сервере mc.WarNight.net:<br><br><input id=nick placeholder=никнейм style="font-size: 33px"><br>
+<select id=rank style="font-size: 33px">
+<option value="1 2.99">VIP - 299 рублей</option>
+<option value="2 4.99">Lord - 499 рублей</option>
+<option value="3 9.99">Lord+ - 999 рублей</option>
+<option value="4 29.99">Владелец - 2999 рублей</option>
+<option value="5 49.99">WarNight - 4999 рублей</option>
+</select>
+<br>
+<button style="font-size: 33px" onclick="pay()">Оплатить</button>
+<br><br>
+Вам также может понравиться:<br>
+• <a href="shop/megahackkey.html">Mega Hack v9 ключ - 799 рублей</a><br><br>
+<a href="javascript:history.back()">Назад</a>
 
-<div class=_wrap>
-
-<h2 style="text-align:center">Донат на сервер mc.WarNight.net</h2>
-
-<div class=_donate>
-
-<input id=nick placeholder="Minecraft никнейм"><br><br>
-
-<select id=rank>
-  <option value="1 2.99">VIP — $2.99</option>
-  <option value="2 4.99">Lord — $4.99</option>
-  <option value="3 9.99">Lord+ — $9.99</option>
-  <option value="4 29.99">Владелец — $29.99</option>
-  <option value="5 49.99">WarNight — $49.99</option>
-</select><br><br>
-
-<button onclick=pay()>Оплатить</button>
-
-</div>
-
-<hr>
-
-<h3>Дополнительные товары</h3>
-
-<div class=_goods>
-  <a href="/shop/6" class=_card>
-    <img src="/shop/6.avif" width=200>
-    <div class=_price>$7.99</div>
-    <div class=_name>Ключ Mega Hack v9</div>
-  </a>
-
-  <a href="/shop/7" class=_card>
-    <img src="/shop/7.avif" width=200>
-    <div class=_price>$4.99</div>
-    <div class=_name>Ключ GDH</div>
-  </a>
-</div>
+<br><br><a style="font-size: 15px" href=contacts.html>Контакты</a>
 
 <script>
 async function pay(){
   const n = nick.value.trim()
   if(!n) return alert("Введите ник")
+
   const [id, price] = rank.value.split(" ")
-  location = await (await fetch("/api/np",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount:+price,desc:id+" "+n})
+
+  location = await (await fetch("/api/np", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount: +price,
+      desc: id + " " + n
+    })
   })).text()
 }
 </script>
-
-<script src=/_f.js></script>
-
-</div>

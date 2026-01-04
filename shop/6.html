@@ -1,38 +1,54 @@
-<link rel=stylesheet href=/_s.css>
-<script src=/_h.js></script>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mega Hack v9 — ключ</title>
+  <link rel="stylesheet" href="/_s.css">
+  <script src="/_h.js"></script>
+</head>
+<body>
+  <div class="page">
+    <div class="hero">
+      <p class="badge">Цифровой ключ</p>
+      <h1>Mega Hack v9</h1>
+      <p class="muted">Доставка на email после оплаты.</p>
+    </div>
 
-<div class=_wrap>
+    <div class="panel" style="margin-top:20px; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items:start;">
+      <div class="stack">
+        <img class="product-img" src="/shop/6.avif" alt="Mega Hack v9">
+        <p class="muted">Mega Hack v9 — набор инструментов для Geometry Dash. Ключ выдаётся после оплаты.</p>
+      </div>
 
-<h2>Ключ Mega Hack v9</h2>
+      <div class="stack">
+        <p class="price-tag">$7.99</p>
+        <label for="email">Email для получения ключа</label>
+        <input id="email" type="email" placeholder="you@example.com">
 
-<img src="/shop/6.avif" width=300><br><br>
+        <label for="qty">Количество</label>
+        <input id="qty" type="number" min="1" max="10" value="1">
 
-Цена: $7.99<br><br>
+        <button class="btn" onclick="pay()">Оплатить</button>
+      </div>
+    </div>
 
-<input id=email placeholder="Email для получения ключа"><br><br>
+    <script src="/_f.js"></script>
+  </div>
 
-Количество:
-<select id=qty>
-  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-  <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-</select>
-<br><br>
-
-<button onclick=pay()>Оплатить</button>
-
-<script>
-async function pay(){
-  const e = email.value.trim()
-  if(!e) return alert("Введите email")
-  const q = +qty.value
-  location = await (await fetch("/api/np",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount:+(7.99*q).toFixed(2),desc:`6x${q} ${e}`})
-  })).text()
-}
-</script>
-
-<script src=/_f.js></script>
-
-</div>
+  <script>
+  async function pay(){
+    const e = email.value.trim();
+    if(!e) return alert("Введите email");
+    const q = Math.max(1, Math.min(10, +qty.value || 1));
+    qty.value = q;
+    const resp = await fetch("/api/np",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({amount:+(7.99*q).toFixed(2),desc:`6x${q} ${e}`})
+    });
+    location = await resp.text();
+  }
+  </script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 
 <script>
 async function pay(){
-  const e = email.value.trim()
+  const e = mail.value.trim()
   if(!e) return alert("Введите email")
 
   location = await (await fetch("/api/np",{

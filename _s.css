@@ -24,3 +24,10 @@ img{max-width:100%;height:auto}
 ._price{font-weight:600;margin-top:6px;text-align:center}
 ._name{font-size:16px;line-height:1.2;word-wrap:break-word;text-align:center}
 ._card:hover{opacity:.85}
+
+._donate input,
+._donate select,
+._donate button{
+  width:360px;
+  max-width:100%;
+}

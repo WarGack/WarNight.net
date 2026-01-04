@@ -6,38 +6,21 @@ button{cursor:pointer}
 table{border-collapse:collapse}
 td,th{padding:6px 10px;border:1px solid #333}
 img{max-width:100%;height:auto}
+
+._wrap{max-width:900px;margin:0 auto}
+
 ._footer{display:flex;justify-content:space-between;font-size:16px;gap:12px;flex-wrap:wrap}
 ._footerR a{margin-left:10px}
-._nav{display:flex;gap:16px;margin-bottom:20px}
-._nav a{padding:6px 10px;border:1px solid #333;text-decoration:none}
-._nav a:hover{background:#111}
+
 ._nav{display:flex;gap:16px;margin-bottom:20px}
 ._nav a{padding:6px 10px;border:1px solid #333;text-decoration:none}
 ._nav a:hover{background:#111}
 ._nav a._on{background:#111;border-color:#777}
-._goods{display:flex;flex-wrap:wrap;gap:20px}
-._goods a{text-decoration:none}
 
-._card{
-  width:200px;
-  text-decoration:none;
-  display:block;
-}
+._goods{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
 
-._card img{
-  display:block;
-}
-
-._price{
-  font-weight:600;
-  margin-top:6px;
-}
-
-._name{
-  font-size:16px;
-  line-height:1.2;
-  word-wrap:break-word;
-}
-
-._price, ._name{text-align:center}
-._card:hover{opacity:.11}
+._card{width:200px;text-decoration:none;display:block}
+._card img{display:block}
+._price{font-weight:600;margin-top:6px;text-align:center}
+._name{font-size:16px;line-height:1.2;word-wrap:break-word;text-align:center}
+._card:hover{opacity:.85}

@@ -2,8 +2,8 @@ const path = location.pathname.replace(/\/+$/, "") || "/";
 const isDonate = path === "/donate" || path === "/donate.html";
 const isDemon = path === "/demonlist" || path === "/demonlist.html";
 const navLinks = [
-  { href: "/donate", label: "Донат", active: isDonate },
-  { href: "/demonlist", label: "Демонлист", active: isDemon }
+  { href: "/demonlist", label: "Демонлист", active: isDemon },
+  { href: "/donate", label: "Донат", active: isDonate }
 ];
 
 document.write(`

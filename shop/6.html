@@ -1,78 +1,38 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Ключ Mega Hack v9</title>
-  <link rel="stylesheet" href="/_s.css">
-</head>
-<body>
-<script src="/_h.js"></script>
-<div class="_wrap">
-  <div class="panel section product">
-    <div>
-      <img src="/shop/6.avif" alt="Ключ Mega Hack v9">
-    </div>
-    <div class="form-grid">
-      <div>
-        <h1 class="page-title">Ключ Mega Hack v9</h1>
-        <p class="lede">Современный мод-менеджер для Geometry Dash. Доставка ключа на email сразу после оплаты.</p>
-        <div class="price-pill">$7.99 · мгновенная выдача</div>
-      </div>
+<link rel=stylesheet href=/_s.css>
+<script src=/_h.js></script>
 
-      <form class="form-grid" onsubmit="pay();return false;">
-        <div>
-          <div class="label">Email для получения ключа</div>
-          <input id="email" class="input" type="email" autocomplete="email" placeholder="you@example.com" required>
-        </div>
+<div class=_wrap>
 
-        <div class="quantity">
-          <div class="label">Количество</div>
-          <div class="qty-controls">
-            <input id="qty" class="number" type="number" min="1" max="10" value="1">
-            <input id="qtyRange" class="range" type="range" min="1" max="10" value="1">
-            <div class="total" id="total">$7.99</div>
-          </div>
-        </div>
+<h2>Ключ Mega Hack v9</h2>
 
-        <div class="form-actions">
-          <button type="submit" class="btn">Оплатить</button>
-          <button type="button" class="btn secondary" onclick="location.href='/donate'">Вернуться к донату</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+<img src="/shop/6.avif" width=300><br><br>
+
+Цена: $7.99<br><br>
+
+<input id=email placeholder="Email для получения ключа"><br><br>
+
+Количество:
+<select id=qty>
+  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+  <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+</select>
+<br><br>
+
+<button onclick=pay()>Оплатить</button>
 
 <script>
-const price = 7.99;
-const qtyInput = document.getElementById('qty');
-const qtyRange = document.getElementById('qtyRange');
-const totalEl = document.getElementById('total');
-
-function sync(value){
-  const qty = Math.min(10, Math.max(1, parseInt(value || '1', 10)));
-  qtyInput.value = qty;
-  qtyRange.value = qty;
-  totalEl.textContent = `$${(price * qty).toFixed(2)}`;
-  return qty;
-}
-
-qtyInput.addEventListener('input', e => sync(e.target.value));
-qtyRange.addEventListener('input', e => sync(e.target.value));
-
-function pay(){
-  const email = document.getElementById('email').value.trim();
-  if(!email) return alert('Введите email');
-  const qty = sync(qtyInput.value);
-  const resPromise = fetch('/api/np', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({amount:+(price*qty).toFixed(2), desc:`6x${qty} ${email}`})
-  });
-  resPromise.then(async r => { location = await r.text(); });
+async function pay(){
+  const e = email.value.trim()
+  if(!e) return alert("Введите email")
+  const q = +qty.value
+  location = await (await fetch("/api/np",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({amount:+(7.99*q).toFixed(2),desc:`6x${q} ${e}`})
+  })).text()
 }
 </script>
 
-<script src="/_f.js"></script>
-</body>
-</html>
+<script src=/_f.js></script>
+
+</div>

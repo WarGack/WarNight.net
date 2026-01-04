@@ -1,20 +1,10 @@
-const path = (location.pathname.replace(/\/+$/, "") || "/").toLowerCase();
-const is = (href) => path === href || path === `${href}.html` || path.startsWith(`${href}/`);
-const links = [
-  { href: "/donate", label: "Донат" },
-  { href: "/demonlist", label: "Демонлист" }
-];
+var p = location.pathname.replace(/\/+$/,"") || "/"
+var d = p=="/demonlist" || p=="/demonlist.html"
+var o = p=="/donate" || p=="/donate.html" || p.startsWith("/shop")
 
-document.write(`
-  <div class="topbar">
-    <div class="topbar__inner">
-      <a class="brand" href="/">
-        <span>WN</span>
-        WarNight
-      </a>
-      <div class="nav">
-        ${links.map(l => `<a href="${l.href}" class="${is(l.href) ? 'is-active' : ''}">${l.label}</a>`).join('')}
-      </div>
-    </div>
-  </div>
-`);
+document.write(
+  '<div class=_nav>'
+  +'<a href="/demonlist"'+(d?' class=_on':'')+'>Демонлист</a>'
+  +'<a href="/donate"'+(o?' class=_on':'')+'>Донат</a>'
+  +'</div><hr>'
+)

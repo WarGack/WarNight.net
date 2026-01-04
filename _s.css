@@ -9,13 +9,13 @@ img{max-width:100%;height:auto}
 
 ._wrap{max-width:900px;margin:0 auto}
 
-._footer{display:flex;justify-content:space-between;font-size:16px;gap:12px;flex-wrap:wrap}
-._footerR a{margin-left:10px}
-
 ._nav{display:flex;gap:16px;margin-bottom:20px}
 ._nav a{padding:6px 10px;border:1px solid #333;text-decoration:none}
 ._nav a:hover{background:#111}
 ._nav a._on{background:#111;border-color:#777}
+
+._footer{display:flex;justify-content:space-between;font-size:16px;gap:12px;flex-wrap:wrap}
+._footerR a{margin-left:10px}
 
 ._goods{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
 

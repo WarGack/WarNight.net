@@ -1,38 +1,51 @@
-<link rel=stylesheet href=/_s.css>
-<script src=/_h.js></script>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Ключ GDH — WarNight Shop</title>
+  <link rel="stylesheet" href="/_s.css">
+</head>
+<body>
+<script src="/_h.js"></script>
+<div class="_wrap">
+  <div class="pill">Магазин</div>
+  <div class="_sectionTitle">Ключ GDH</div>
+  <p class="_sectionLead">Гибкий выбор количества, моментальная выдача после оплаты на указанный email.</p>
 
-<div class=_wrap>
+  <div class="itemLayout">
+    <div class="itemCard">
+      <img src="/shop/7.avif" alt="Ключ GDH" width="300" style="border-radius:12px;border:1px solid var(--border);width:100%;height:auto;display:block">
+    </div>
+    <div class="itemCard">
+      <div class="itemPrice">$4.99</div>
+      <label for="email">Email для получения ключа</label>
+      <input id="email" placeholder="you@example.com">
 
-<h2>Ключ GDH</h2>
+      <label for="qty" style="margin-top:8px">Количество</label>
+      <select id="qty">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      </select>
 
-<img src="/shop/7.avif" width=300><br><br>
+      <button onclick="pay()" style="margin-top:10px">Оплатить</button>
+      <p style="color:var(--muted);margin:12px 0 0">Мы отправим ключи сразу после подтверждения платежа.</p>
+    </div>
+  </div>
 
-Цена: $4.99<br><br>
+  <script>
+  async function pay(){
+    const e = email.value.trim()
+    if(!e) return alert("Введите email")
+    const q = +qty.value
+    location = await (await fetch("/api/np",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({amount:+(4.99*q).toFixed(2),desc:`7x${q} ${e}`})
+    })).text()
+  }
+  </script>
 
-<input id=email placeholder="Email для получения ключа"><br><br>
-
-Количество:
-<select id=qty>
-  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-  <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-</select>
-<br><br>
-
-<button onclick=pay()>Оплатить</button>
-
-<script>
-async function pay(){
-  const e = email.value.trim()
-  if(!e) return alert("Введите email")
-  const q = +qty.value
-  location = await (await fetch("/api/np",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount:+(4.99*q).toFixed(2),desc:`7x${q} ${e}`})
-  })).text()
-}
-</script>
-
-<script src=/_f.js></script>
-
+  <script src="/_f.js"></script>
 </div>
+</body>
+</html>

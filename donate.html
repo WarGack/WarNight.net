@@ -16,32 +16,53 @@
         <span class="copy-pill__tip">Скопировать IP сервера в буфер обмена</span>
       </button>
     </h1>
-  </div>
+    <p class="lede">Классическое меню доната в стиле Minecraft с моментальной оплатой через защищённый API.</p>
 
-  <div class="panel section">
-    <form class="form-grid" onsubmit="pay();return false;">
-      <div>
-        <div class="label">Выбор привилегии</div>
-        <select id="rank" class="select">
-          <option value="1" data-price="2.99" data-label="VIP">VIP — $2.99</option>
-          <option value="2" data-price="4.99" data-label="Lord">Lord — $4.99</option>
-          <option value="3" data-price="9.99" data-label="Lord+">Lord+ — $9.99</option>
-          <option value="4" data-price="29.99" data-label="Владелец">Владелец — $29.99</option>
-          <option value="5" data-price="49.99" data-label="WarNight">WarNight — $49.99</option>
-        </select>
-      </div>
+    <div class="tiers" id="tiers">
+      <button type="button" class="tier is-active" data-id="1" data-label="VIP" data-price="2.99">
+        <div class="tier__name">VIP</div>
+        <div class="tier__price">$2.99</div>
+        <div class="tier__note">Базовый набор привилегий</div>
+      </button>
+      <button type="button" class="tier" data-id="2" data-label="Lord" data-price="4.99">
+        <div class="tier__name">Lord</div>
+        <div class="tier__price">$4.99</div>
+        <div class="tier__note">Больше плюшек на сервере</div>
+      </button>
+      <button type="button" class="tier" data-id="3" data-label="Lord+" data-price="9.99">
+        <div class="tier__name">Lord+</div>
+        <div class="tier__price">$9.99</div>
+        <div class="tier__note">Расширенный доступ</div>
+      </button>
+      <button type="button" class="tier" data-id="4" data-label="Владелец" data-price="29.99">
+        <div class="tier__name">Владелец</div>
+        <div class="tier__price">$29.99</div>
+        <div class="tier__note">Почти все права сервера</div>
+      </button>
+      <button type="button" class="tier" data-id="5" data-label="WarNight" data-price="49.99">
+        <div class="tier__name">WarNight</div>
+        <div class="tier__price">$49.99</div>
+        <div class="tier__note">Максимальный уровень</div>
+      </button>
+    </div>
+
+    <div class="form-grid" style="margin-top:14px;align-items:center">
       <div>
         <div class="label">Minecraft никнейм</div>
         <input id="nick" class="input" autocomplete="nickname" placeholder="Никнейм" required>
       </div>
-      <div class="form-actions">
-        <button type="submit" class="btn">Оплатить</button>
+      <div>
+        <div class="label">К оплате</div>
+        <div class="price-pill" id="total">$2.99 · VIP</div>
       </div>
-    </form>
+      <div class="form-actions">
+        <button type="button" class="btn" onclick="pay()">Оплатить</button>
+      </div>
+    </div>
   </div>
 
   <div class="panel section">
-    <h3>Дополнительные товары</h3>
+    <h3 style="margin:0 0 10px">Дополнительные товары</h3>
     <div class="goods">
       <a href="/shop/6" class="card">
         <img src="/shop/6.avif" alt="Ключ Mega Hack v9">
@@ -62,15 +83,32 @@
 </div>
 
 <script>
+let activeTier = document.querySelector('.tier.is-active');
+const totalEl = document.getElementById('total');
+
+function updateTotal(tier){
+  if(!tier) return;
+  const price = Number(tier.dataset.price).toFixed(2);
+  totalEl.textContent = `$${price} · ${tier.dataset.label}`;
+}
+
+document.getElementById('tiers').addEventListener('click', (e) => {
+  const target = e.target.closest('.tier');
+  if(!target) return;
+  if(activeTier) activeTier.classList.remove('is-active');
+  activeTier = target;
+  activeTier.classList.add('is-active');
+  updateTotal(activeTier);
+});
+
 function pay(){
   const nick = document.getElementById('nick').value.trim();
   if(!nick) return alert('Введите ник');
-  const select = document.getElementById('rank');
-  const chosen = select.options[select.selectedIndex];
+  const tier = activeTier || document.querySelector('.tier');
   const resPromise = fetch('/api/np', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ amount: +chosen.dataset.price, desc: `${chosen.value} ${nick}` })
+    body: JSON.stringify({ amount: +tier.dataset.price, desc: `${tier.dataset.id} ${nick}` })
   });
   resPromise.then(async r => { location = await r.text(); });
 }
@@ -92,6 +130,8 @@ if(ipButton){
     }
   });
 }
+
+updateTotal(activeTier);
 </script>
 
 <script src="/_f.js"></script>

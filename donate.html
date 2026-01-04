@@ -1,57 +1,72 @@
-<link rel=stylesheet href=/_s.css>
-<script src=/_h.js></script>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Донат mc.WarNight.net</title>
+  <link rel="stylesheet" href="/_s.css">
+  <script src="/_h.js"></script>
+</head>
+<body>
+  <div class="page">
+    <div class="hero">
+      <p class="badge">Minecraft • mc.WarNight.net</p>
+      <h1>Донат на сервер</h1>
+      <p class="muted">Выберите ранг, укажите никнейм и оплатите — инвойс откроется сразу после отправки.</p>
 
-<div class=_wrap>
+      <div class="panel">
+        <h2 class="section-title">Классические привилегии</h2>
+        <div class="form">
+          <label for="nick">Minecraft никнейм</label>
+          <input id="nick" placeholder="например, WarGack">
 
-<h2 style="text-align:center">Донат на сервер mc.WarNight.net</h2>
+          <label for="rank">Ранг</label>
+          <select id="rank">
+            <option value="1 2.99">VIP — $2.99</option>
+            <option value="2 4.99">Lord — $4.99</option>
+            <option value="3 9.99">Lord+ — $9.99</option>
+            <option value="4 29.99">Владелец — $29.99</option>
+            <option value="5 49.99">WarNight — $49.99</option>
+          </select>
 
-<div class=_donate>
+          <button class="btn" onclick="pay()">Оплатить</button>
+        </div>
+      </div>
+    </div>
 
-<input id=nick placeholder="Minecraft никнейм"><br><br>
+    <div class="panel" style="margin-top:24px;">
+      <h2 class="section-title">Дополнительные товары</h2>
+      <div class="grid">
+        <a class="card" href="/shop/6">
+          <img class="product-img" src="/shop/6.avif" alt="Mega Hack v9">
+          <p class="card__title">Ключ Mega Hack v9</p>
+          <p class="card__meta">$7.99 · доставка на email</p>
+          <span class="btn">Купить ключ</span>
+        </a>
+        <a class="card" href="/shop/7">
+          <img class="product-img" src="/shop/7.avif" alt="GDH Key">
+          <p class="card__title">Ключ GDH</p>
+          <p class="card__meta">$4.99 · доставка на email</p>
+          <span class="btn">Купить ключ</span>
+        </a>
+      </div>
+    </div>
 
-<select id=rank>
-  <option value="1 2.99">VIP — $2.99</option>
-  <option value="2 4.99">Lord — $4.99</option>
-  <option value="3 9.99">Lord+ — $9.99</option>
-  <option value="4 29.99">Владелец — $29.99</option>
-  <option value="5 49.99">WarNight — $49.99</option>
-</select><br><br>
+    <script src="/_f.js"></script>
+  </div>
 
-<button onclick=pay()>Оплатить</button>
-
-</div>
-
-<hr>
-
-<h3>Дополнительные товары</h3>
-
-<div class=_goods>
-  <a href="/shop/6" class=_card>
-    <img src="/shop/6.avif" width=200>
-    <div class=_price>$7.99</div>
-    <div class=_name>Ключ Mega Hack v9</div>
-  </a>
-
-  <a href="/shop/7" class=_card>
-    <img src="/shop/7.avif" width=200>
-    <div class=_price>$4.99</div>
-    <div class=_name>Ключ GDH</div>
-  </a>
-</div>
-
-<script>
-async function pay(){
-  const n = nick.value.trim()
-  if(!n) return alert("Введите ник")
-  const [id, price] = rank.value.split(" ")
-  location = await (await fetch("/api/np",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount:+price,desc:id+" "+n})
-  })).text()
-}
-</script>
-
-<script src=/_f.js></script>
-
-</div>
+  <script>
+  async function pay(){
+    const n = nick.value.trim();
+    if(!n) return alert("Введите никнейм");
+    const [id, price] = rank.value.split(" ");
+    const resp = await fetch("/api/np",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({amount:+price,desc:id+" "+n})
+    });
+    location = await resp.text();
+  }
+  </script>
+</body>
+</html>

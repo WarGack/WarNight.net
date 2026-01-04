@@ -61,7 +61,13 @@
         <div class="price-pill">Выбрано: <span id="pay-name">VIP</span> · <span id="pay-total">$2.99</span></div>
         <button type="submit" class="btn">Оплатить</button>
       </div>
-      <div class="label">mc.WarNight.net · онлайн 24/7 · покупка привилегий в один клик</div>
+      <div class="copy-row">
+        <div class="label">mc.WarNight.net · онлайн 24/7</div>
+        <button type="button" class="copy-pill" id="server-ip" data-ip="mc.WarNight.net">
+          mc.WarNight.net
+          <span class="copy-pill__tip">Скопировать IP сервера в буфер обмена</span>
+        </button>
+      </div>
     </form>
   </div>
 
@@ -114,6 +120,24 @@ function pay(){
     body: JSON.stringify({ amount: +chosen.dataset.price, desc: `${chosen.dataset.id} ${nick}` })
   });
   resPromise.then(async r => { location = await r.text(); });
+}
+
+const ipButton = document.getElementById('server-ip');
+if(ipButton){
+  const tip = ipButton.querySelector('.copy-pill__tip');
+  const defaultTip = tip ? tip.textContent : '';
+  ipButton.addEventListener('click', async () => {
+    const ip = ipButton.dataset.ip;
+    try {
+      await navigator.clipboard.writeText(ip);
+      if(tip){
+        tip.textContent = 'Скопировано!';
+        setTimeout(() => tip.textContent = defaultTip, 2000);
+      }
+    } catch (e) {
+      alert('Не удалось скопировать IP');
+    }
+  });
 }
 </script>
 

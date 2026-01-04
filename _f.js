@@ -1,1 +1,1 @@
-document.write('<hr><div class=_footer><a href="mailto:help@warnight.net">help@warnight.net</a><div class=_footerR><a href="https://youtube.com/wargack">YouTube</a><a href="https://t.me/wargack">Telegram</a></div></div>')
+document.write('<hr><div class=_footer><a href="mailto:help@warnight.net">help@warnight.net</a><div class=_footerR><a href="https://youtube.com/wargack">YouTube</a><a href="https://t.me/wargack">Telegram</a><a href="https://discord.gg/warnight-net-866417946095386654">Discord</a></div></div>')

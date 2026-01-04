@@ -8,19 +8,53 @@
 <body>
 <script src="/_h.js"></script>
 <div class="_wrap">
-  <h1 class="_pageTitle">WarNight.net</h1>
-  <p class="_lede">Минималистичный магазин цифровых товаров и доната с упором на скорость и защиту.</p>
-
-  <div class="_section">
-    <h3>Разделы</h3>
-    <p><a href="/donate">Донат на сервер mc.WarNight.net</a> — привилегии и поддержка проекта.</p>
-    <p><a href="/shop/6">Ключ Mega Hack v9</a> и <a href="/shop/7">ключ GDH</a> — цифровые товары с мгновенной доставкой на email.</p>
-    <p><a href="/demonlist">Демонлист</a> — официальный список сложнейших демонов Geometry Dash.</p>
+  <div class="panel section">
+    <h1 class="page-title">WarNight.net</h1>
+    <p class="lede">Минималистичный магазин цифровых товаров и доната с Discord-подобным тёмным стилем и мгновенной обработкой.</p>
+    <div class="buttons">
+      <a class="btn" href="/donate">Купить донат</a>
+      <a class="btn secondary" href="/demonlist">Открыть демонлист</a>
+    </div>
   </div>
 
-  <div class="_section">
+  <div class="panel section">
+    <h3>Разделы</h3>
+    <div class="goods">
+      <a class="card" href="/donate">
+        <img src="/shop/6.avif" alt="Донат на сервер mc.WarNight.net">
+        <div class="card__body">
+          <div class="card__price">Донат</div>
+          <div class="card__title">Классическое меню привилегий для mc.WarNight.net</div>
+        </div>
+      </a>
+      <a class="card" href="/shop/6">
+        <img src="/shop/6.avif" alt="Ключ Mega Hack v9">
+        <div class="card__body">
+          <div class="card__price">$7.99</div>
+          <div class="card__title">Цифровой ключ Mega Hack v9</div>
+        </div>
+      </a>
+      <a class="card" href="/shop/7">
+        <img src="/shop/7.avif" alt="Ключ GDH">
+        <div class="card__body">
+          <div class="card__price">$4.99</div>
+          <div class="card__title">Доступ к GDH с мгновенной доставкой</div>
+        </div>
+      </a>
+      <a class="card" href="/demonlist">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%235865f2'/%3E%3Cstop offset='100%25' stop-color='%230c0f15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='640' height='360' fill='url(%23g)'/%3E%3Ctext x='50%' y='50%' font-size='48' font-family='Inter,Segoe UI,system-ui' fill='%23e8ecf2' text-anchor='middle' dominant-baseline='middle'%3EDemonlist%3C/text%3E%3C/svg%3E" alt="Демонлист">
+        <div class="card__body">
+          <div class="card__price">Демонлист</div>
+          <div class="card__title">Официальный список сложнейших демонов Geometry Dash</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="panel section">
     <h3>О проекте</h3>
-    <p>Все страницы используют единый тёмный стиль, компактную сетку и общий хедер/футер. Лишний код убран, оставлена только необходимая информация и формы оплаты.</p>
+    <p class="lede">Код намеренно минимален: без сборки, без сторонних библиотек, только быстрые страницы и защищённый Cloudflare Worker.</p>
+    <p>Все платежи проходят через API, защищённый схемой и правилами Cloudflare. Вёрстка придерживается тёмной палитры, вдохновлённой Discord, чтобы интерфейс оставался чистым и знакомым.</p>
   </div>
 </div>
 <script src="/_f.js"></script>

@@ -8,58 +8,112 @@
 <body>
 <script src="/_h.js"></script>
 <div class="_wrap">
-  <h1 class="_pageTitle">Донат на mc.WarNight.net</h1>
-  <p class="_lede">Поддержите сервер и получите привилегии. Оплата защищена, доставка мгновенная.</p>
-
-  <form class="_donate" onsubmit="pay();return false;">
-    <div class="_field">
-      <label for="nick">Minecraft никнейм</label>
-      <input id="nick" autocomplete="nickname" placeholder="Никнейм">
+  <div class="panel section">
+    <h1 class="page-title">Донат на mc.WarNight.net</h1>
+    <p class="lede">Классическое Minecraft-меню привилегий с мгновенной активацией. Тёмный стиль — как в Discord, но с акцентом на изумрудные ранги.</p>
+    <div class="tier-grid" id="tiers">
+      <label class="tier is-active">
+        <input type="radio" name="rank" checked data-id="1" data-price="2.99" data-label="VIP">
+        <div class="tier__badge">Бронзовый старт</div>
+        <div class="tier__name">VIP</div>
+        <div class="tier__price">$2.99</div>
+        <div class="tier__perks">/fly на спавне · бонусные кейсы · выделяющийся префикс</div>
+      </label>
+      <label class="tier">
+        <input type="radio" name="rank" data-id="2" data-price="4.99" data-label="Lord">
+        <div class="tier__badge">Серебро</div>
+        <div class="tier__name">Lord</div>
+        <div class="tier__price">$4.99</div>
+        <div class="tier__perks">Больше хомов · повышенный дроп · улучшенный кита-набор</div>
+      </label>
+      <label class="tier">
+        <input type="radio" name="rank" data-id="3" data-price="9.99" data-label="Lord+">
+        <div class="tier__badge">Золото</div>
+        <div class="tier__name">Lord+</div>
+        <div class="tier__price">$9.99</div>
+        <div class="tier__perks">/god · личные варпы · ускоренная поддержка</div>
+      </label>
+      <label class="tier">
+        <input type="radio" name="rank" data-id="4" data-price="29.99" data-label="Владелец">
+        <div class="tier__badge">Мифический</div>
+        <div class="tier__name">Владелец</div>
+        <div class="tier__price">$29.99</div>
+        <div class="tier__perks">Лимиты сняты · приватные ивенты · персональные бонусы</div>
+      </label>
+      <label class="tier">
+        <input type="radio" name="rank" data-id="5" data-price="49.99" data-label="WarNight">
+        <div class="tier__badge">Legendary</div>
+        <div class="tier__name">WarNight</div>
+        <div class="tier__price">$49.99</div>
+        <div class="tier__perks">Топ-статус сервера, полный доступ к фичам и мгновенная поддержка</div>
+      </label>
     </div>
+  </div>
 
-    <div class="_field">
-      <label for="rank">Выберите привилегию</label>
-      <select id="rank">
-        <option value="1 2.99">VIP — $2.99</option>
-        <option value="2 4.99">Lord — $4.99</option>
-        <option value="3 9.99">Lord+ — $9.99</option>
-        <option value="4 29.99">Владелец — $29.99</option>
-        <option value="5 49.99">WarNight — $49.99</option>
-      </select>
-    </div>
+  <div class="panel section">
+    <h3>Данные для оплаты</h3>
+    <form class="form-grid" onsubmit="pay();return false;">
+      <div>
+        <div class="label">Minecraft никнейм</div>
+        <input id="nick" class="input" autocomplete="nickname" placeholder="Никнейм" required>
+      </div>
+      <div class="form-actions">
+        <div class="price-pill">Выбрано: <span id="pay-name">VIP</span> · <span id="pay-total">$2.99</span></div>
+        <button type="submit" class="btn">Оплатить</button>
+      </div>
+      <div class="label">mc.WarNight.net · онлайн 24/7 · покупка привилегий в один клик</div>
+    </form>
+  </div>
 
-    <button type="submit">Оплатить</button>
-  </form>
-
-  <div class="_section">
+  <div class="panel section">
     <h3>Дополнительные товары</h3>
-    <div class="_goods">
-      <a href="/shop/6" class="_card">
-        <img src="/shop/6.avif" width="200" alt="Ключ Mega Hack v9">
-        <div class="_price">$7.99</div>
-        <div class="_name">Ключ Mega Hack v9</div>
+    <div class="goods">
+      <a href="/shop/6" class="card">
+        <img src="/shop/6.avif" alt="Ключ Mega Hack v9">
+        <div class="card__body">
+          <div class="card__price">$7.99</div>
+          <div class="card__title">Ключ Mega Hack v9</div>
+        </div>
       </a>
-
-      <a href="/shop/7" class="_card">
-        <img src="/shop/7.avif" width="200" alt="Ключ GDH">
-        <div class="_price">$4.99</div>
-        <div class="_name">Ключ GDH</div>
+      <a href="/shop/7" class="card">
+        <img src="/shop/7.avif" alt="Ключ GDH">
+        <div class="card__body">
+          <div class="card__price">$4.99</div>
+          <div class="card__title">Ключ GDH</div>
+        </div>
       </a>
     </div>
   </div>
 </div>
 
 <script>
-async function pay(){
-  const n = nick.value.trim()
-  if(!n) return alert("Введите ник")
-  const [id, price] = rank.value.split(" ")
-  const res = await fetch("/api/np",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount:+price,desc:id+" "+n})
-  })
-  location = await res.text()
+const tierBlocks = [...document.querySelectorAll('.tier')];
+const nameEl = document.getElementById('pay-name');
+const totalEl = document.getElementById('pay-total');
+
+function syncTiers(target){
+  tierBlocks.forEach(t => t.classList.remove('is-active'));
+  target.classList.add('is-active');
+  const input = target.querySelector('input');
+  nameEl.textContent = input.dataset.label;
+  totalEl.textContent = `$${(+input.dataset.price).toFixed(2)}`;
+}
+
+tierBlocks.forEach(t => {
+  const input = t.querySelector('input');
+  input.addEventListener('change', () => syncTiers(t));
+});
+
+function pay(){
+  const nick = document.getElementById('nick').value.trim();
+  if(!nick) return alert('Введите ник');
+  const chosen = document.querySelector('input[name="rank"]:checked');
+  const resPromise = fetch('/api/np', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: +chosen.dataset.price, desc: `${chosen.dataset.id} ${nick}` })
+  });
+  resPromise.then(async r => { location = await r.text(); });
 }
 </script>
 

@@ -106,7 +106,6 @@ a:hover {
 
 .hero {
   background: var(--panel);
-  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 28px;
   box-shadow: var(--shadow);
@@ -131,7 +130,7 @@ a:hover {
 
 .card {
   background: #0f1626;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: 14px;
   padding: 18px;
   box-shadow: var(--shadow);

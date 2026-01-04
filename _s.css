@@ -155,7 +155,7 @@ a:hover{text-decoration:underline}
   font:inherit;
 }
 .input:focus, .select:focus, .number:focus{outline:2px solid rgba(0,0,255,0.35);border-color:rgba(0,0,255,0.4)}
-.form-actions{display:flex;gap:10px;flex-wrap:wrap}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
 
 /* Copy helper */
 .copy-row{
@@ -163,6 +163,25 @@ a:hover{text-decoration:underline}
   align-items:center;
   gap:10px;
   flex-wrap:wrap;
+}
+.copy-inline{
+  position:relative;
+  border:1px solid rgba(0,0,255,0.25);
+  background:rgba(0,0,255,0.05);
+  color:var(--accent);
+  font:inherit;
+  font-weight:800;
+  padding:6px 12px 6px 10px;
+  margin-left:6px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease, border-color .08s ease, background .08s ease;
+}
+.copy-inline:hover{
+  transform:translateY(-1px);
+  border-color:rgba(0,0,255,0.35);
+  background:rgba(0,0,255,0.1);
+  box-shadow:0 8px 24px rgba(0,0,255,0.12);
 }
 .copy-pill{
   position:relative;

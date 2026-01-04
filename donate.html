@@ -9,12 +9,16 @@
 <script src="/_h.js"></script>
 <div class="_wrap">
   <div class="panel section">
-    <h1 class="page-title">Донат на mc.WarNight.net</h1>
-    <p class="lede">Простое меню доната в белой теме: выбери привилегию, укажи ник и оплатите мгновенно.</p>
+    <h1 class="page-title">
+      Донат на
+      <button type="button" class="copy-inline" id="server-ip" data-ip="mc.WarNight.net">
+        mc.WarNight.net
+        <span class="copy-pill__tip">Скопировать IP сервера в буфер обмена</span>
+      </button>
+    </h1>
   </div>
 
   <div class="panel section">
-    <h3>Данные для оплаты</h3>
     <form class="form-grid" onsubmit="pay();return false;">
       <div>
         <div class="label">Выбор привилегии</div>
@@ -31,15 +35,7 @@
         <input id="nick" class="input" autocomplete="nickname" placeholder="Никнейм" required>
       </div>
       <div class="form-actions">
-        <div class="price-pill">К оплате: <span id="pay-total">$2.99</span></div>
         <button type="submit" class="btn">Оплатить</button>
-      </div>
-      <div class="copy-row">
-        <div class="label">mc.WarNight.net · онлайн 24/7</div>
-        <button type="button" class="copy-pill" id="server-ip" data-ip="mc.WarNight.net">
-          mc.WarNight.net
-          <span class="copy-pill__tip">Скопировать IP сервера в буфер обмена</span>
-        </button>
       </div>
     </form>
   </div>
@@ -66,22 +62,11 @@
 </div>
 
 <script>
-const select = document.getElementById('rank');
-const totalEl = document.getElementById('pay-total');
-
-function syncPrice(){
-  const opt = select.options[select.selectedIndex];
-  totalEl.textContent = `$${(+opt.dataset.price).toFixed(2)}`;
-  return opt;
-}
-
-select.addEventListener('change', syncPrice);
-syncPrice();
-
 function pay(){
   const nick = document.getElementById('nick').value.trim();
   if(!nick) return alert('Введите ник');
-  const chosen = syncPrice();
+  const select = document.getElementById('rank');
+  const chosen = select.options[select.selectedIndex];
   const resPromise = fetch('/api/np', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

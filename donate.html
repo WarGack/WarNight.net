@@ -22,7 +22,7 @@ async function pay(){
 
   const [id, price] = rank.value.split(" ")
 
-  location = await (await fetch("https://warnight.net/api/fk", {
+  location = await (await fetch("/api/fk", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

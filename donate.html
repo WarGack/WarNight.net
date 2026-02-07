@@ -7,43 +7,24 @@
 <option value="5 4999">WarNight - 4999 рублей</option>
 </select>
 <br>
-<button style="font-size: 33px" onclick="paycrypto()">Оплатить криптой</button><button style="font-size: 33px" onclick="paycard()">Оплатить картой</button>
+<button style="font-size: 33px" onclick="pay('crypto')">Оплатить криптой</button><button style="font-size: 33px" onclick="pay('card')">Оплатить картой</button><button style="font-size: 33px" onclick="pay('sbp')">Оплатить системой быстрых платежей</button>
 <br><br>
 Вам также может понравиться:<br>
-• <a href="shop/megahackkey.html">Mega Hack v9 ключ - 799 рублей</a><br><br>
+- <a href="shop/megahackkey.html">Mega Hack v9 ключ - 799 рублей</a><br><br>
 <a href="javascript:history.back()">Назад</a>
-
 <br><br><a style="font-size: 15px" href=contacts.html>Контакты</a>
-
 <script>
-async function paycrypto(){
+async function pay(method){
   const n = nick.value.trim()
   if(!n) return alert("Введите ник")
-
   const [id, price] = rank.value.split(" ")
-
-  location = await (await fetch("/api/np", {
+  location = await (await fetch("/api/pay", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       amount: +price,
-      desc: id + " " + n
-    })
-  })).text()
-}
-
-async function paycard(){
-  const n = nick.value.trim()
-  if(!n) return alert("Введите ник")
-
-  const [id, price] = rank.value.split(" ")
-
-  location = await (await fetch("/api/fk", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      amount: +price,
-      desc: id + " " + n
+      desc: id + " " + n,
+      method
     })
   })).text()
 }

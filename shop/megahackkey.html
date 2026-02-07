@@ -1,20 +1,21 @@
 <title>Mega Hack v9 ключ</title><center><body style="font-size: 33px">Ключ Mega Hack v9<br>Цена: 799 рублей<br>
 Описание:<br>Активировать <a href=https://absolllute.com/store/redeem>здесь</a><br><br><input id=mail placeholder=email style="font-size: 33px"><br>
-<button style="font-size: 33px" onclick="pay()">Оплатить</button>
+<button style="font-size: 33px" onclick="pay('crypto')">Оплатить криптой</button><button style="font-size: 33px" onclick="pay('card')">Оплатить картой</button><button style="font-size: 33px" onclick="pay('sbp')">Оплатить системой быстрых платежей</button>
 <br><br>
 <a href="javascript:history.back()">Назад</a>
 
 <script>
-async function pay(){
+async function pay(method){
   const e = mail.value.trim()
   if(!e) return alert("Введите email")
 
-  location = await (await fetch("/api/np",{
+  location = await (await fetch("/api/pay",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
-      amount: 7.99,
-      desc: `6 ${e}`
+      amount: 799,
+      desc: `6 ${e}`,
+      method
     })
   })).text()
 }

@@ -7,7 +7,7 @@
 <option value="5 4999">WarNight - 4999 рублей</option>
 </select>
 <br>
-<button style="font-size: 33px" onclick="pay()">Оплатить</button>
+<button style="font-size: 33px" onclick="paycrypto()">Оплатить криптой</button><button style="font-size: 33px" onclick="paycard()">Оплатить картой</button>
 <br><br>
 Вам также может понравиться:<br>
 • <a href="shop/megahackkey.html">Mega Hack v9 ключ - 799 рублей</a><br><br>
@@ -16,7 +16,23 @@
 <br><br><a style="font-size: 15px" href=contacts.html>Контакты</a>
 
 <script>
-async function pay(){
+async function paycrypto(){
+  const n = nick.value.trim()
+  if(!n) return alert("Введите ник")
+
+  const [id, price] = rank.value.split(" ")
+
+  location = await (await fetch("/api/np", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount: +price,
+      desc: id + " " + n
+    })
+  })).text()
+}
+
+async function paycard(){
   const n = nick.value.trim()
   if(!n) return alert("Введите ник")
 

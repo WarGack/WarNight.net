@@ -51,9 +51,9 @@
         list.innerHTML = data.map(d => `
           <div class="item">
             <div class="left">
-              <span class="name">${d.username || "Аноним"}</span>
+              <span class="name">${d.what || "Аноним"}</span>
               ${d.comment ? `<span class="msg">${d.comment}</span>` : ""}
-              <span class="date">${new Date(d.created_at * 1000).toLocaleString("ru-RU")}</span>
+              <span class="date">${new Date(d.created_at).toLocaleString("ru-RU")}</span>
             </div>
             <span class="amount">${d.sum} ₽</span>
           </div>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>HollowCraft</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="game">
+
+  <header id="hud">
+    <div class="brand" id="brand" title="Сделано WarGack'ом">Hollow<span>Craft</span></div>
+    <div class="currencies">
+      <div class="cur cur-exp"><span class="cur-label">Опыт</span><span class="cur-val" id="val-exp">0</span></div>
+      <div class="cur cur-coins"><span class="cur-label">Монеты</span><span class="cur-val" id="val-coins">0</span></div>
+      <div class="cur cur-putin"><span class="cur-label">Путин-коины</span><span class="cur-val" id="val-putin">0</span></div>
+    </div>
+    <div class="hud-buttons">
+      <button class="icon-btn" id="btn-ach">Достижения</button>
+      <button class="icon-btn" id="btn-settings">Настройки</button>
+    </div>
+  </header>
+
+  <nav id="tabs">
+    <button class="tab active" data-tab="mine">Шахта</button>
+    <button class="tab" data-tab="arena">Арена</button>
+    <button class="tab" data-tab="shop">Магазин</button>
+    <button class="tab" data-tab="cases">Кейсы</button>
+  </nav>
+
+  <main id="content">
+
+    <section class="panel active" id="panel-mine">
+      <div class="mine-area">
+        <p class="ticker" id="mine-tip">Кликай по сфере — добывай опыт.</p>
+        <div class="sphere-wrap">
+          <img id="sphere" src="assets/img/sparea.gif" alt="Сфера опыта" draggable="false">
+        </div>
+        <div class="bar charge-bar">
+          <div class="bar-fill" id="charge-fill"></div>
+          <span class="bar-text" id="charge-text">0 / 10</span>
+        </div>
+        <p class="mine-reward">Награда за полный заряд: <b id="mine-reward">12</b> опыта</p>
+        <div class="btn-row">
+          <button class="big-btn" id="btn-smelt">Переплавить<small>1 000 опыта в 1 монету</small></button>
+          <button class="big-btn" id="btn-ultrasmelt">Ультра-плавка<small>1 000 000 опыта в 1 200 монет</small></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-arena">
+      <div class="arena-area">
+        <div class="boss-stage" id="boss-stage">
+          <div class="boss-name" id="boss-name">Босс</div>
+          <div class="boss-imgwrap"><img id="boss-img" src="" alt="Босс" draggable="false"></div>
+          <div class="bar hp-bar">
+            <div class="bar-fill hp" id="hp-fill"></div>
+            <span class="bar-text" id="hp-text"></span>
+          </div>
+          <p class="boss-dmg">Урон за удар: <b id="boss-dmg">5</b><span id="boss-regen"></span></p>
+          <p class="boss-dialogue" id="boss-dialogue"></p>
+        </div>
+        <div class="boss-list" id="boss-list"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-shop">
+      <div class="shop-area">
+        <h2>Оружие <span class="h2-note">наносит урон боссам</span></h2>
+        <div class="shop-grid" id="shop-weapons"></div>
+        <h2>Генераторы <span class="h2-note">пассивный доход, в т.ч. оффлайн</span></h2>
+        <div class="shop-grid" id="shop-generators"></div>
+        <h2>Кейсы <span class="h2-note">открываются во вкладке Кейсы</span></h2>
+        <div class="shop-grid" id="shop-cases"></div>
+        <h2>Путин-бусты <span class="h2-note">за Путин-коины</span></h2>
+        <div class="shop-grid" id="shop-boosts"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-cases">
+      <div class="cases-area">
+        <div class="case-box" id="case-box">
+          <img id="case-img" src="assets/img/casehack.png" alt="Кейс" draggable="false">
+        </div>
+        <p class="case-count">Кейсов в наличии: <b id="case-count">0</b></p>
+        <button class="big-btn" id="btn-open-case">Открыть кейс</button>
+        <div class="case-result" id="case-result"></div>
+        <p class="hint">Кейсы покупаются в Магазине.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="overlay" id="overlay-intro">
+  <div class="modal">
+    <h1>HollowCraft</h1>
+    <p>Ты попал в дикий лес и нашёл дупло. Внизу — шахта опыта.</p>
+    <p>Кликай сферу и добывай <b>опыт</b>, переплавляй его в <b>монеты</b>,
+       покупай оружие и генераторы, побеждай восемь боссов леса — от Медведя
+       до Дракона-Властелина.</p>
+    <p class="hint">Прогресс сохраняется сам. Генераторы работают, даже когда игра закрыта.</p>
+    <button class="big-btn" id="btn-intro-start">В лес</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-ach">
+  <div class="modal">
+    <h1>Достижения</h1>
+    <div class="ach-list" id="ach-list"></div>
+    <button class="big-btn" id="btn-ach-close">Закрыть</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-settings">
+  <div class="modal">
+    <h1>Настройки</h1>
+    <label class="set-row">Музыка <input type="range" id="set-music" min="0" max="100" value="40"></label>
+    <label class="set-row">Звуки <input type="range" id="set-sfx" min="0" max="100" value="70"></label>
+    <div class="set-row">
+      <button class="mini-btn" id="btn-export">Скопировать сохранение</button>
+      <button class="mini-btn" id="btn-import">Загрузить из строки</button>
+    </div>
+    <textarea id="save-box" placeholder="Строка сохранения появится здесь. Сюда же можно вставить чужую для загрузки."></textarea>
+    <div class="set-row">
+      <button class="mini-btn danger" id="btn-reset">Сбросить прогресс</button>
+      <button class="big-btn" id="btn-set-close">Закрыть</button>
+    </div>
+    <p class="hint" id="set-version">HollowCraft Web. Сделано WarGack'ом, 2017—2026.</p>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-offline">
+  <div class="modal">
+    <h1>С возвращением</h1>
+    <p id="offline-text"></p>
+    <button class="big-btn" id="btn-offline-close">Забрать</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-victory">
+  <div class="modal">
+    <h1>HollowCraft пройден</h1>
+    <p>Все восемь боссов леса повержены. Дракон-Властелин лежит.</p>
+    <p id="victory-stats"></p>
+    <p class="hint">Можно продолжать играть: кейсы, генераторы, достижения.</p>
+    <button class="big-btn" id="btn-victory-close">Закрыть</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-console">
+  <div class="modal">
+    <h1>Консоль разработчика</h1>
+    <p class="hint">Старые коды HollowCraft всё ещё работают.</p>
+    <input type="text" id="console-input" placeholder="Введи код" autocomplete="off">
+    <div class="set-row">
+      <button class="big-btn" id="btn-console-run">Выполнить</button>
+      <button class="mini-btn" id="btn-console-close">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<div id="fx"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/game.js"></script>
+</body>
+</html>

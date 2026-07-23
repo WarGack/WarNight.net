@@ -12,28 +12,32 @@
 <br>
 <div class="cf-turnstile" data-sitekey="0x4AAAAAAD8AhW1toVv1NZj0" data-callback="onVerify" data-appearance="interaction-only"></div>
 <br>
-<button style="font-size: 33px" onclick="pay('crypto')">Оплатить криптой</button><button style="font-size: 33px" onclick="pay('card')">Оплатить картой</button><button style="font-size: 33px" onclick="pay('sbp')">Оплатить системой быстрых платежей</button>
+<button id=b1 disabled style="font-size: 33px" onclick="pay('crypto')">Оплатить криптой</button><button id=b2 disabled style="font-size: 33px" onclick="pay('card')">Оплатить картой</button><button id=b3 disabled style="font-size: 33px" onclick="pay('sbp')">Оплатить системой быстрых платежей</button>
 <br><br>
 Вам также может понравиться:<br>
 - <a href="megahackkey.html">Mega Hack v9 ключ - 799 рублей</a><br><br>
 <a href="javascript:history.back()">Назад</a>
 <script>
-let cleared = false
-function onVerify(){ cleared = true }   // cf_clearance уже выставлена
+function onVerify(){
+  b1.disabled = b2.disabled = b3.disabled = false   // Turnstile прошёл, cf_clearance выдана
+}
 
 async function pay(method){
   const n = nick.value.trim()
   if(!n) return alert("Введите ник")
-  if(!cleared) return alert("Секунду, идёт проверка…")
   const [id, price] = rank.value.split(" ")
   const res = await fetch("/api/pay", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: +price, desc: id + " " + n, method })
+    body: JSON.stringify({
+      amount: +price,
+      desc: id + " " + n,
+      method
+    })
   })
-  if(!res.ok) return alert("Ошибка, попробуйте позже")
-  const url = await res.text()
-  if(!/^https?:\/\//.test(url)) return alert("Ошибка оплаты")
-  location = url
+  const body = await res.text()
+  console.log("api/pay:", res.status, body)          // временный лог для диагностики
+  if(!res.ok || !/^https?:\/\//.test(body)) return alert("Ошибка оплаты. status=" + res.status)
+  location = body
 }
 </script>

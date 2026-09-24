@@ -369,6 +369,24 @@
     border: 0;
   }
 
+  .video-box { position: relative; }
+  .yt-fallback {
+    position: absolute;
+    right: 10px; top: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 8px;
+    padding: 5px 10px;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+  }
+  .yt-fallback:hover { opacity: 1; color: #fff; }
+
   /* Footer */
   .footer {
     text-align: center;
@@ -708,21 +726,63 @@ for (let i = 0; i < 30; i++) {
   container.appendChild(p);
 }
 
-// Click-to-load embedded players: no exit to YouTube, fast page load
+// Click-to-load: обычный youtube.com (НЕ youtube-nocookie),
+// чтобы подхватывались куки/авторизация и не вылезал
+// "Sign in to confirm you're not a bot". Активен только 1 плеер.
+function unloadOthers(except) {
+  document.querySelectorAll('.video-wrapper').forEach((w) => {
+    if (w !== except && w.dataset.loaded === '1') {
+      const id = w.dataset.videoId;
+      const title = w.dataset.title || 'Видео прохождения';
+      w.dataset.loaded = '';
+      w.style.cursor = 'pointer';
+      w.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+      img.alt = title + ' — превью видео';
+      img.loading = 'lazy';
+      const btn = document.createElement('button');
+      btn.className = 'video-facade';
+      btn.setAttribute('aria-label', 'Смотреть ' + title + ' прямо на странице');
+      btn.innerHTML = '<span class="play-icon">▶</span>';
+      const badge = document.createElement('span');
+      badge.className = 'video-badge';
+      badge.textContent = '🎬 встроено • YouTube не откроется';
+      w.appendChild(img);
+      w.appendChild(btn);
+      w.appendChild(badge);
+    }
+  });
+}
 function loadPlayer(wrapper) {
   if (wrapper.dataset.loaded === '1') return;
+  unloadOthers(wrapper);
   wrapper.dataset.loaded = '1';
   const id = wrapper.dataset.videoId;
   const title = wrapper.dataset.title || 'Видео прохождения';
+  const origin = (location.origin && location.origin !== 'null') ? '&origin=' + encodeURIComponent(location.origin) : '';
   const iframe = document.createElement('iframe');
-  iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
+  iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1' + origin;
   iframe.title = title;
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
   iframe.allowFullscreen = true;
   iframe.loading = 'lazy';
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
   wrapper.innerHTML = '';
   wrapper.appendChild(iframe);
   wrapper.style.cursor = 'default';
+  // Запасной выход, если YouTube всё равно упрётся в bot-check:
+  // открывает только это видео в новой вкладке.
+  let fb = wrapper.parentElement.querySelector('.yt-fallback');
+  if (!fb) {
+    fb = document.createElement('a');
+    fb.className = 'yt-fallback';
+    fb.target = '_blank';
+    fb.rel = 'noopener';
+    fb.textContent = 'Не играет? Открыть на YouTube ↗';
+    wrapper.parentElement.appendChild(fb);
+  }
+  fb.href = 'https://www.youtube.com/watch?v=' + id;
 }
 
 document.querySelectorAll('.video-wrapper').forEach((w) => {
